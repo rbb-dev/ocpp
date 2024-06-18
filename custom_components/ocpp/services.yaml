@@ -49,6 +49,10 @@ clear_profile:
   name: Clear charging profiles
   description: Clears all charging profiles (limits) set (dependent on charger support)
 
+trigger_meter_values:
+  name: Trigger meter values
+  description: Trigger charger to send current meter values
+
 update_firmware:
   name: Update charger firmware
   description: Specify server to download firmware and time to delay updating (dependent on charger support), supported transfer protocols can be requested by the configuration key SupportedFileTransferProtocols

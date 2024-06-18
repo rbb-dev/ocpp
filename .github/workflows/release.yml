@@ -1,26 +1,63 @@
-name: Create Release ZIP
+name: Release Workflow
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*"
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Create ZIP file
+      - name: Set Variables
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+
+      - name: Delete Existing Release (if any)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Checking for existing release with tag $TAG_NAME..."
+          RELEASE_ID=$(gh api repos/${{ github.repository }}/releases/tags/$TAG_NAME --jq '.id' 2>/dev/null || echo "")
+          if [ -n "$RELEASE_ID" ]; then
+            echo "Deleting existing release with ID $RELEASE_ID"
+            gh api repos/${{ github.repository }}/releases/$RELEASE_ID -X DELETE
+          else
+            echo "No existing release found for tag $TAG_NAME."
+          fi
+
+      - name: Delete Existing Tag (if any)
+        run: |
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Deleting existing tag $TAG_NAME"
+            git tag -d "$TAG_NAME"
+            git push origin --delete "$TAG_NAME" || true
+          fi
+
+      - name: Create New Release
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Creating a new release for tag $TAG_NAME..."
+          gh release create "$TAG_NAME" --title "$TAG_NAME" --notes "Release $TAG_NAME" --prerelease --json upload_url | jq -r '.upload_url' > upload_url.txt
+        shell: bash
+
+      - name: Build Release Assets
         run: |
           mkdir -p build
           zip -r build/ocpp.zip ./*
+          echo "Release assets created."
 
-      - name: Upload Release Asset
+      - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
+          upload_url: $(cat upload_url.txt)
           asset_path: build/ocpp.zip
           asset_name: ocpp.zip
           asset_content_type: application/zip
