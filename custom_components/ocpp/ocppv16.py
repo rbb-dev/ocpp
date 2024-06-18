@@ -258,6 +258,15 @@ class ChargePoint(cp):
             _LOGGER.warning("Failed with response: %s", resp.status)
             return False
 
+    async def trigger_meter_values(self):
+        """Trigger meter values notification."""
+        req = call.TriggerMessage(requested_message=MessageTrigger.meter_values)
+        resp = await self.call(req)
+        if resp.status != TriggerMessageStatus.accepted:
+            _LOGGER.warning("Failed with response: %s", resp.status)
+            return False
+        return True
+
     async def trigger_status_notification(self):
         """Trigger status notifications for all connectors."""
         return_value = True

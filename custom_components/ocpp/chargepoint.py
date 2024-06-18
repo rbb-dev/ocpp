@@ -384,6 +384,7 @@ class ChargePoint(cp):
                 if self.received_boot_notification is False:
                     await self.trigger_boot_notification()
                 await self.trigger_status_notification()
+                await self.trigger_meter_values()
         except NotImplementedError as e:
             _LOGGER.error("Configuration of the charger failed: %s", e)
 
@@ -393,6 +394,10 @@ class ChargePoint(cp):
 
     async def trigger_status_notification(self):
         """Trigger status notifications for all connectors."""
+        pass
+
+    async def trigger_meter_values(self):
+        """Trigger meter values for all connectors."""
         pass
 
     async def clear_profile(self):
