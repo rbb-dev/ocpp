@@ -280,6 +280,13 @@ class ChargePoint(cp):
                 return
             await self.clear_profile()
 
+        async def handle_trigger_meter_values(call):
+            """Handle the trigger meter values service call."""
+            if self.status == STATE_UNAVAILABLE:
+                _LOGGER.warning("%s charger is currently unavailable", self.id)
+                return
+            await self.trigger_meter_values()
+
         async def handle_update_firmware(call):
             """Handle the firmware update service call."""
             if self.status == STATE_UNAVAILABLE:
@@ -373,6 +380,12 @@ class ChargePoint(cp):
                     csvcs.service_get_diagnostics.value,
                     handle_get_diagnostics,
                     GDIAG_SERVICE_DATA_SCHEMA,
+                )
+            if prof.REM in self._attr_supported_features:
+                self.hass.services.async_register(
+                    DOMAIN,
+                    csvcs.service_trigger_meter_values.value,
+                    handle_trigger_meter_values,
                 )
             self.post_connect_success = True
             _LOGGER.debug(f"'{self.id}' post connection setup completed successfully")

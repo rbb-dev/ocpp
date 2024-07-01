@@ -62,6 +62,7 @@ async def test_cms_responses_v16(hass, socket_enabled):
             csvcs.service_get_configuration,
             csvcs.service_get_diagnostics,
             csvcs.service_clear_profile,
+            csvcs.service_trigger_meter_values,
             csvcs.service_data_transfer,
             csvcs.service_set_charge_rate,
         ]

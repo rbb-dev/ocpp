@@ -20,6 +20,7 @@ class HAChargerServices(str, Enum):
     service_get_configuration_v201 = "get_configuration_v201"
     service_get_diagnostics = "get_diagnostics"
     service_clear_profile = "clear_profile"
+    service_trigger_meter_values = "trigger_meter_values"
     service_data_transfer = "data_transfer"
 
 
