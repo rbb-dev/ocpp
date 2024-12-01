@@ -168,14 +168,14 @@ class ChargePoint(cp):
             return {"value": value}
 
         self.hass.services.async_register(
-            DOMAIN,
+            self.central.cpid,
             csvcs.service_configure_v201.value,
             handle_configure,
             CONF_SERVICE_DATA_SCHEMA,
             supports_response=SupportsResponse.OPTIONAL,
         )
         self.hass.services.async_register(
-            DOMAIN,
+            self.central.cpid,
             csvcs.service_get_configuration_v201.value,
             handle_get_configuration,
             GCONF_SERVICE_DATA_SCHEMA,
