@@ -18,7 +18,7 @@ this allows 2+ chargers to register and access independent set_charge_rate servi
 
 
 
-
+Buy lbbrhzn some coffee here :)
 <a href="https://www.buymeacoffee.com/lbbrhzn" target="_blank">
   <img src="https://cdn.buymeacoffee.com/buttons/default-black.png" alt="Buy Me A Coffee" width="150px">
 </a>
