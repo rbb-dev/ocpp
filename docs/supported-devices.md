@@ -69,6 +69,9 @@ match transactions and it won't report some meter values such as session time.
 
 ## [MaXpeedingrods Ev Charger](https://www.maxpeedingrods.com/category/ev-charger.html)
 
+## [Morek EV 11 kW smart charger](https://ev.morek.eu/product/ev-charging-mev11drewn6t2/)
+At least firmware version "A0-MEV-V2.0.9" is necessary for successful connection.
+
 ## [Simpson & Partners](https://simpson-partners.com/home-ev-charger/)
 All basic functions work properly
 
