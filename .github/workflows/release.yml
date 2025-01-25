@@ -40,13 +40,11 @@ jobs:
           fi
 
       - name: Create New Release
-        id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Creating a new release for tag $TAG_NAME..."
-          gh release create "$TAG_NAME" --title "$TAG_NAME" --notes "Release $TAG_NAME" --prerelease --json upload_url | jq -r '.upload_url' > upload_url.txt
-        shell: bash
+          gh release create "$TAG_NAME" --title "$TAG_NAME" --notes "Release $TAG_NAME" --prerelease
 
       - name: Build Release Assets
         run: |
@@ -57,7 +55,7 @@ jobs:
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: $(cat upload_url.txt)
+          upload_url: ${{ github.event.release.upload_url }}
           asset_path: build/ocpp.zip
           asset_name: ocpp.zip
           asset_content_type: application/zip
